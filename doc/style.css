@@ -1,0 +1,24 @@
+h1 {
+    /*display: inline;*/ /*posso far diventare un blocco -> inline*/
+    margin: 0;
+    padding-bottom: 3rem;   /*dimensione del carattere che non cambia*/
+    color: red;
+    background-color: green;
+}
+
+.par {
+    margin: 0;
+    padding: 10px 40px;
+    /*in senso orario alto, desta, basso, sinistra*/
+    background-color: magenta;
+}
+
+.par span { /*Per gli elementi span dentro la classe tag*/
+    /*display: block;/* /*posso far diventare un elemento inline -> block*/
+
+    margin-left: 15px;
+    padding: 0px 5px;
+    border: 2px solid white; /*dashed per un border tratteggiato*/
+    color: white;
+    background-color: blue;
+}
