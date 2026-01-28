@@ -1,24 +1,35 @@
-h1 {
-    /*display: inline;*/ /*posso far diventare un blocco -> inline*/
+body {
     margin: 0;
-    padding-bottom: 3rem;   /*dimensione del carattere che non cambia*/
-    color: red;
-    background-color: green;
+    height: 100vh;
+    display: flex;
+    justify-content: center; /* centro orizzontale */
+    align-items: center;     /* centro verticale */
+    background-color: grey;
+    font-family: sans-serif;
 }
 
-.par {
-    margin: 0;
-    padding: 10px 40px;
-    /*in senso orario alto, desta, basso, sinistra*/
-    background-color: magenta;
+#canvasContainer {
+    display: flex;            /* canvas e controlli affiancati */
+    gap: 20px;                /* spazio tra canvas e controlli */
+    align-items: flex-start;  /* allinea in alto */
+    background-color: white;
 }
 
-.par span { /*Per gli elementi span dentro la classe tag*/
-    /*display: block;/* /*posso far diventare un elemento inline -> block*/
+canvas {
+    background-color: white;
+    border: 2px solid black;
+}
 
-    margin-left: 15px;
-    padding: 0px 5px;
-    border: 2px solid white; /*dashed per un border tratteggiato*/
-    color: white;
-    background-color: blue;
+
+#controls {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+#controls label {
+    font-size: 14px;
+}
+#controls input {
+    width: 60px;
 }
