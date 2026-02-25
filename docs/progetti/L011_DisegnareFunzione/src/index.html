@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+    <title>DF | Es 11</title>
+</head>
+
+<body>
+<div class="header">
+    <!--- LOGO --->
+    <div class="logo">
+        <a href="../../../index.html">
+            <img src="../../../assets/images/logoAT.png" alt="Logo">
+        </a>
+    </div>
+    <!--- BOTTONI MENU DENTRO HEADER --->
+    <div class="menu-button">
+        <a href="../../index.html">Progetti</a>
+        <a href="../../../aboutMe.html">About Me</a>
+        <a href="../../../contactMe.html" >Contact Me</a>
+    </div>
+</div>
+
+<div id="options">
+    <div id="zoomPane">
+        <label for="zoom">Zoom</label>
+        <input type="range" id="zoom" min="-10" max="10" value="1" step="0.5">
+        <span id="zoomValue"></span>
+    </div>
+    <div id="inputPane">
+        <label for="equation">Input: </label>
+        <input type="text" id="equation" placeholder='ex. "+2x^3 +x^2 -3"' autocomplete="off">
+    </div>
+    <div id="displayEqn">
+        <span>Plotted: </span>
+        <span id="eqn"></span>
+    </div>
+</div>
+
+<div id="screen">
+    <canvas width="900" height="900" id="Canvas"></canvas>
+</div>
+
+</body>
+</html>

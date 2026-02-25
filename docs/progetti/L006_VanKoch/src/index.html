@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../assets/style.css">
+    <script src="script.js" defer></script>
+    <title>Van Koch | Es 06</title>
+</head>
+
+
+<body>
+<div class="header">
+    <!--- LOGO --->
+    <div class="logo">
+        <a href="../../../index.html">
+            <img src="../../../assets/images/logoAT.png" alt="Logo">
+        </a>
+    </div>
+    <!--- BOTTONI MENU DENTRO HEADER --->
+    <div class="menu-button">
+        <a href="../../index.html">Progetti</a>
+        <a href="../../../aboutMe.html">About Me</a>
+        <a href="../../../contactMe.html" >Contact Me</a>
+    </div>
+</div>
+
+    <label for="n">Choose a number:</label>
+    <select name="numbers" id="n">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="5">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </select>
+    <button onclick="getN()">Send</button>
+    <div id="contenitore">
+        <canvas id="myCanvas" width="500" height="500"></canvas>
+    </div>
+
+
+</body>

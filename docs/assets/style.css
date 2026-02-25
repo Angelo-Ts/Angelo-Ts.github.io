@@ -1,0 +1,69 @@
+/* RESET BASE */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    color: #3f3f3f;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between; /* logo a sinistra, link a destra */
+    align-items: center;
+    padding: 20px 40px; /*paddin nella base lato*/
+    width: 100%;
+    background: #ffffff;
+}
+
+/* LOGO */
+.logo img {
+    height: 55px;
+}
+
+/* MENU-BUTTON: link orizzontali a destra */
+.menu-button {
+    display: flex;
+    gap: 40px; /*spazio tra ogni link*/
+}
+
+/* LINK */
+.menu-button a {
+    text-decoration: none; /*toglie il "classico aspetto" di un link*/
+    color: #3f3f3f;
+    font-weight: 500;
+    font-size: 18px;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+/* HOVER: linea animata sotto il testo */
+.menu-button a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 2px;
+    background: #4b4949;
+    transition: width 0.3s ease;
+}
+
+.menu-button a:hover {
+    color: #0387d9;
+}
+
+.menu-button a:hover::after {
+    width: 100%;
+}
+
+/*TITOLO*/
+h1 {
+    color: #313131;
+    font-family: "Euphemia UCAS", serif;
+    font-size: 40px;
+}
