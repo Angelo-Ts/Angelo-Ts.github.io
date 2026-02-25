@@ -1,4 +1,7 @@
+/* ========================= */
 /* SEZIONE PROJECT */
+/* ========================= */
+
 .project {
     padding: 60px 40px;
 }
@@ -9,77 +12,74 @@
     font-size: 36px;
 }
 
-/* FLEX CONTAINER */
-/* CARD COME LINK */
+/* ========================= */
+/* CONTENITORE FLEX */
+/* ========================= */
+
+.project-table {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* ========================= */
+/* CARD PROGETTO */
+/* ========================= */
+
 .project-card {
     position: relative;
-    width: 350px;           /* più grande */
-    height: 250px;          /* più grande */
+    width: 350px;
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     overflow: hidden;
     cursor: pointer;
-    background-size: cover;
-    background-position: center;
+}
+
+/* Immagine come sfondo */
+.project-card img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    z-index: 0;
     transition: transform 0.4s ease;
-    border-radius: 0;        /* angoli dritti */
 }
 
-/* FLEX CONTAINER */
-.project-table {
-    display: flex;
-    justify-content: center;
-    gap: 10px;               /* più vicini */
-    flex-wrap: wrap;
-}
-
-/* HOVER: sparisce overlay + leggero zoom */
-.project-card:hover .overlay {
-    background: rgba(0,0,0,0);
-}
-
-.project-card:hover {
-    transform: scale(1.05);
-}
-
-/* Immagini assegnate da CSS */
-.project1 {
-    background-image: url('images/VanKoch.png');
-
-}
-
-.project2 {
-    background-image: url('../assets/images/photo.png');
-}
-
-.project3 {
-    background-image: url('../assets/images/photo.png');
-}
-
-/* Overlay */
+/* Overlay scuro */
 .overlay {
     position: absolute;
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.5);
     transition: 0.4s ease;
+    z-index: 1;
 }
 
-/* Testo sopra */
+/* Titolo sopra */
 .project-card h2 {
     position: relative;
     color: white;
     font-size: 24px;
     z-index: 2;
+    text-align: center;
 }
 
-/* Hover: sparisce overlay + leggero zoom */
+/* ========================= */
+/* HOVER EFFECT */
+/* ========================= */
+
+/* Zoom solo immagine */
+.project-card:hover img {
+    transform: scale(1.1);
+}
+
+/* Overlay sparisce */
 .project-card:hover .overlay {
     background: rgba(0,0,0,0);
-}
-
-.project-card:hover {
-    transform: scale(1.05);
 }
