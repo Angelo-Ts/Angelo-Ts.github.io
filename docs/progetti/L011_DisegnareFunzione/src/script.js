@@ -1,4 +1,4 @@
-"use strict";
+/*"use strict";
 
 
 function validate(input) {
@@ -192,4 +192,4 @@ window.addEventListener('load', () => {
         }
     });
 
-});
+}); */

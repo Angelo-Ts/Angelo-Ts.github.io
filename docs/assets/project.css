@@ -4,6 +4,8 @@
 
 .project {
     padding: 60px 40px;
+    background: linear-gradient(13deg, rgba(215, 252, 228, 1) 0%, rgba(3, 135, 217, 1) 93%);
+
 }
 
 .project h1 {

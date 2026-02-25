@@ -5,9 +5,12 @@
     box-sizing: border-box;
 }
 
-body{
+html, body {
     font-family: Arial, sans-serif;
     color: #3f3f3f;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 /* HEADER */
@@ -15,9 +18,14 @@ body{
     display: flex;
     justify-content: space-between; /* logo a sinistra, link a destra */
     align-items: center;
-    padding: 20px 40px; /*paddin nella base lato*/
+    padding: 20px 40px; /*padding nella base lato*/
     width: 100%;
     background: #ffffff;
+}
+
+.contenuto {
+    background: linear-gradient(13deg, rgba(215, 252, 228, 1) 0%, rgba(3, 135, 217, 1) 93%);
+    flex: 1;
 }
 
 /* LOGO */
@@ -63,7 +71,14 @@ body{
 
 /*TITOLO*/
 h1 {
-    color: #313131;
+    color: #ffffff;
     font-family: "Euphemia UCAS", serif;
     font-size: 40px;
+}
+
+#title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
 }
