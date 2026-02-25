@@ -10,28 +10,38 @@
 }
 
 /* FLEX CONTAINER */
-.project-table {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-}
-
 /* CARD COME LINK */
 .project-card {
     position: relative;
-    width: 300px;
-    height: 200px;
+    width: 350px;           /* più grande */
+    height: 250px;          /* più grande */
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     overflow: hidden;
-    border-radius: 10px;
     cursor: pointer;
     background-size: cover;
     background-position: center;
     transition: transform 0.4s ease;
+    border-radius: 0;        /* angoli dritti */
+}
+
+/* FLEX CONTAINER */
+.project-table {
+    display: flex;
+    justify-content: center;
+    gap: 10px;               /* più vicini */
+    flex-wrap: wrap;
+}
+
+/* HOVER: sparisce overlay + leggero zoom */
+.project-card:hover .overlay {
+    background: rgba(0,0,0,0);
+}
+
+.project-card:hover {
+    transform: scale(1.05);
 }
 
 /* Immagini assegnate da CSS */
