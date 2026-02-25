@@ -46,7 +46,8 @@
 
 /* Immagini assegnate da CSS */
 .project1 {
-    background-image: url('../assets/images/photo.png');
+    background-image: url('images/VanKoch.png');
+
 }
 
 .project2 {
