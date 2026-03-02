@@ -19,7 +19,8 @@
 /* ========================= */
 
 .project-table {
-        display: flex;
+    display: grid;
+    grid-template: "a a a";
     justify-content: center;
     gap: 20px;
     flex-wrap: wrap;
@@ -31,14 +32,13 @@
 
 .project-card {
     position: relative;
-    width: 350px;
-    height: 250px;
+    width: 400px;
+    height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     overflow: hidden;
-    cursor: pointer;
 }
 
 /* Immagine come sfondo */
