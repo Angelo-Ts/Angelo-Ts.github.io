@@ -21,11 +21,18 @@ html, body {
     padding: 20px 40px; /*padding nella base lato*/
     width: 100%;
     background: #ffffff;
+    box-shadow: 10px 10px 5px  #3f3f3f;
 }
 
 .contenuto {
     background: linear-gradient(13deg, rgba(215, 252, 228, 1) 0%, rgba(3, 135, 217, 1) 93%);
     flex: 1;
+}
+
+.contenuto h1{
+    text-align: center;
+    padding: 60px 0;
+    font-size: 45px;
 }
 
 /* LOGO */

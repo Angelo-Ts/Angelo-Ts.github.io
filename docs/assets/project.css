@@ -51,6 +51,16 @@
     left: 0;
     z-index: 0;
     transition: transform 0.4s ease;
+
+}
+
+/* Titolo sopra */
+.project-card h2 {
+    position: relative;
+    color: white;
+    font-size: 24px;
+    z-index: 2;
+    text-align: center;
 }
 
 /* Overlay scuro */
@@ -61,15 +71,6 @@
     background: rgba(0,0,0,0.5);
     transition: 0.4s ease;
     z-index: 1;
-}
-
-/* Titolo sopra */
-.project-card h2 {
-    position: relative;
-    color: white;
-    font-size: 24px;
-    z-index: 2;
-    text-align: center;
 }
 
 /* ========================= */
