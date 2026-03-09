@@ -60,9 +60,12 @@ const turtle = {
     },
 };
 //------------------------------------------------------------------
-function getN (){
-    let selectElement = document.getElementById('n');
-    let n = Number(selectElement.value);
+
+let n = document.getElementById('n');
+n.addEventListener('change', getN);
+
+function getN () {
+    let n = document.getElementById('n').value;
     console.log(n);
 
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -74,19 +77,19 @@ function getN (){
     }
 }
 
-function vonKoch(n, lenght){
-    if( n === 0){
-        turtle.forward(lenght);
+function vonKoch(n, length){
+    if( n == 0){
+        turtle.forward(length);
     } else {
-        lenght = lenght/3;
+        length = length/3;
         n -= 1;
-        vonKoch(n, lenght);
+        vonKoch(n, length);
         turtle.turn(-60);
-        vonKoch(n, lenght);
+        vonKoch(n, length);
         turtle.turn(120);
-        vonKoch(n, lenght);
+        vonKoch(n, length);
         turtle.turn(-60);
-        vonKoch(n, lenght);
+        vonKoch(n, length);
     }
 
 }

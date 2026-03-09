@@ -89,3 +89,11 @@ h1 {
     align-items: center;
     height: 150px;
 }
+
+
+
+/*STILE PER CANVAS + CONTROLLI SU PROGETTI*/
+
+#myCanvas{
+    background: white;
+}
