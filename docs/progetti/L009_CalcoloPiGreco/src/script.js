@@ -95,4 +95,6 @@ function calcoloPunto(){
     let PI = 4 * (hit / total);
     console.log(total);
     console.log(PI)
+    let piElement = document.getElementById('PI');
+    piElement.textContent = PI;
 }

@@ -21,7 +21,6 @@ html, body {
     padding: 20px 40px; /*padding nella base lato*/
     width: 100%;
     background: #ffffff;
-    box-shadow: 10px 10px 5px  #3f3f3f;
 }
 
 .contenuto {

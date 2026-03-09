@@ -64,7 +64,7 @@ const turtle = {
 
 function disegnaTrapezio(x, base, h){
     turtle.setY(250);
-    turtle.setX(x);
+    turtle.setX(x   );
     turtle.angle = 0;
     turtle.changeColor('red');
 
@@ -73,32 +73,32 @@ function disegnaTrapezio(x, base, h){
 }
 
 function calcoloPi(){
-    let raggio = 250; //raggio circonferenza
-    let nIterazioni = 10000; //numero iterazioni
-
-    let newX = 250;
+    let raggio = 250; // raggio circonferenza per il disegno
+    let nIterazioni = 10000; // numero di trapezi
+    let newX = 250; // punto di partenza x sul canvas
     let sommaArea = 0;
 
-    let h = raggio / nIterazioni; //divisione del raggio
-    console.log("h" + h);
-
-    let b1 = raggio;
+    let h = 1 / nIterazioni; // passo per il calcolo numerico (unitario)
 
     for (let i = 0; i < nIterazioni; i++) {
-        let b = raggio * Math.sqrt(1 - Math.pow( (i / nIterazioni), 2));
-        console.log("b " + b);
-        sommaArea += (b * 2) / raggio;
-        console.log("somma area " + sommaArea);
-        b1 = b;
+        let x0 = i * h;
+        let x1 = (i + 1) * h;
 
-        disegnaTrapezio(newX, b, h);
-        newX += h;
+        let b0 = Math.sqrt(1 - x0 * x0);
+        let b1 = Math.sqrt(1 - x1 * x1);
+
+        // Area del trapezio
+        let areaTrapezio = (b0 + b1) / 2 * h;
+        sommaArea += areaTrapezio;
+
+        // Disegno dei trapezi sul canvas (scala raggio reale)
+        disegnaTrapezio(newX, b0 * raggio, (b1 - b0) * raggio);
+        newX += h * raggio;
     }
 
-    let sn = sommaArea / 2 * nIterazioni;
-    console.log("sn " + sn);
-    let pi = sn * 4;
-    console.log("PI " + pi);
+    let pi = sommaArea * 4;
+    console.log("PI", pi);
+    document.getElementById('PI').textContent = pi;
 }
 
 function main(){

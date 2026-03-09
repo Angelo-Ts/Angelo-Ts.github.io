@@ -62,7 +62,7 @@ const turtle = {
 };
 
 function s(i) {
-    if (i === 0) {
+    if (i == 0) {
         return 0;
     } 
 
@@ -73,7 +73,7 @@ function s(i) {
     }
 }
 
-function draw(i){
+function draw(i, lato){
     let lunghezzaSequenza = Math.pow(2, i);
 
     for (let y = 0; y < lunghezzaSequenza; y++) {
@@ -81,10 +81,31 @@ function draw(i){
         let valore = s(y);
 
         if (valore === 0) {
-            turtle.forward(4);
+            turtle.forward(lato);
         } else {
             turtle.turn(60);
         }
+    }
+}
+
+//cambio variabili HTML
+let n = document.getElementById('n');
+n.addEventListener('change', getN);
+
+let lato = document.getElementById('lato');
+lato.addEventListener('input', getN);
+
+
+function getN () {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    turtle.setX(window.innerWidth/2);
+    turtle.setY(window.innerHeight/2);
+
+    n = document.getElementById('n').value;
+    lato = document.getElementById('lato').value;
+    for (let i = 0; i < 3; i++) {
+        draw(n, lato);
+        turtle.turn(120);
     }
 }
 
@@ -93,7 +114,7 @@ function main() {
     turtle.setY(0 + 10);
     turtle.angle = 0;
 
-    draw(20);
+    draw(20, 4);
 }
 
 window.addEventListener("load", main);
