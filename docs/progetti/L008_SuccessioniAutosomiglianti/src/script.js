@@ -88,33 +88,24 @@ function draw(i, lato){
     }
 }
 
-//cambio variabili HTML
-let n = document.getElementById('n');
-n.addEventListener('change', getN);
-
-let lato = document.getElementById('lato');
-lato.addEventListener('input', getN);
-
-
-function getN () {
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    turtle.setX(window.innerWidth/2);
-    turtle.setY(window.innerHeight/2);
-
-    n = document.getElementById('n').value;
-    lato = document.getElementById('lato').value;
-    for (let i = 0; i < 3; i++) {
-        draw(n, lato);
-        turtle.turn(120);
-    }
-}
-
 function main() {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
     turtle.setX(width - 10 );
     turtle.setY(0 + 10);
     turtle.angle = 0;
 
-    draw(20, 4);
+    n = Number(document.getElementById('n').value);
+    lato = Number(document.getElementById('lato').value);
+
+    draw(n, lato);
 }
 
 window.addEventListener("load", main);
+
+//cambio variabili HTML
+let n = document.getElementById('n');
+n.addEventListener('change', main);
+
+let lato = document.getElementById('lato');
+lato.addEventListener('input', main);

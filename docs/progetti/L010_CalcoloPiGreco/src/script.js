@@ -72,9 +72,9 @@ function disegnaTrapezio(x, base, h){
     turtle.forward(base);
 }
 
-function calcoloPi(){
+function calcoloPi(i){
     let raggio = 250; // raggio circonferenza per il disegno
-    let nIterazioni = 10000; // numero di trapezi
+    let nIterazioni = i; // numero di trapezi
     let newX = 250; // punto di partenza x sul canvas
     let sommaArea = 0;
 
@@ -102,10 +102,12 @@ function calcoloPi(){
 }
 
 function main(){
-
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     ctx.arc(width/2, height/2, 250, 0, 360);
     ctx.stroke();
 
+    turtle.color = 'black';
+    turtle.angle = 0;
     turtle.setX(width/2);
     turtle.setY(width/2);
     turtle.forward(250);
@@ -114,8 +116,10 @@ function main(){
     turtle.turn(90);
     turtle.forward(250);
 
-
-
-    calcoloPi();
+    i = Number(document.getElementById('i').value);
+    calcoloPi(i);
 }
 window.addEventListener("load", main);
+
+let i = document.getElementById('i');
+i.addEventListener('change', main);
