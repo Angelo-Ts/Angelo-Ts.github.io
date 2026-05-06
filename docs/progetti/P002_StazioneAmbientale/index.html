@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stazione ambientale</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="../../assets/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="header" style="background-color:#0f1117;">
+    <!-- LOGO -->
+    <div class="logo">
+        <a href="../../index.html">
+            <img src="../../assets/images/logoAT.png" alt="Logo">
+        </a>
+    </div>
+    <!-- BOTTONI MENU DENTRO HEADER -->
+    <div class="menu-button">
+        <a href="../index.html">Progetti</a>
+        <a href="../../aboutMe.html">About Me</a>
+        <a href="../../contactMe.html" >Contact Me</a>
+    </div>
+</div>
+
+<h1>Dashboard delle stazioni ambientali</h1>
+
+<!-- CONNESSIONE -->
+<div class="ip-row">
+    <input type="text" id="ipInput" placeholder="Inserisci IP server" />
+    <button id="getData">Connetti</button>
+</div>
+
+<!-- MENÙ A TENDINA -->
+<div class="selects-row">
+    <div class="select-group">
+        <label for="labSelect">Laboratorio</label>
+        <select id="labSelect">
+            <option value="">-- Seleziona laboratorio --</option>
+        </select>
+    </div>
+    <div class="select-group">
+        <label for="stationSelect">Postazione</label>
+        <select id="stationSelect" disabled>
+            <option value="">-- Seleziona postazione --</option>
+        </select>
+    </div>
+</div>
+
+<!-- ULTIMA MISURAZIONE -->
+<div class="section" id="sectionLast" style="display:none">
+    <h2>Ultima misurazione</h2>
+    <div class="metrics-row">
+        <div class="metric">
+            <span class="mlabel">Temperatura</span>
+            <span class="mval" id="lastTemp">--</span>
+        </div>
+        <div class="metric">
+            <span class="mlabel">Umidità</span>
+            <span class="mval" id="lastHum">--</span>
+        </div>
+        <div class="metric">
+            <span class="mlabel">Luminosità</span>
+            <span class="mval" id="lastLux">--</span>
+        </div>
+    </div>
+    <p id="lastTs"></p>
+</div>
+
+<!-- GRAFICO -->
+<div class="section" id="sectionChart" style="display:none">
+    <h2>Andamento misurazioni</h2>
+    <div class="toggle-row">
+        <button class="toggle-btn active" id="btnTemp" onclick="toggleSeries('temp')">Temperatura °C</button>
+        <button class="toggle-btn active" id="btnHum"  onclick="toggleSeries('hum')">Umidità %</button>
+        <button class="toggle-btn active" id="btnLux"  onclick="toggleSeries('lux')">Luminosità lx</button>
+    </div>
+    <div class="chart-wrapper">
+        <canvas id="myChart" role="img" aria-label="Grafico andamento misurazioni">Dati non disponibili.</canvas>
+    </div>
+    <p id="avgCount"></p>
+</div>
+
+<!-- MEDIA -->
+<div class="section" id="sectionAvg" style="display:none">
+    <h2>Media — tutte le misurazioni</h2>
+    <div class="metrics-row">
+        <div class="metric">
+            <span class="mlabel">Temperatura</span>
+            <span class="mval" id="avgTemp">--</span>
+        </div>
+        <div class="metric">
+            <span class="mlabel">Umidità</span>
+            <span class="mval" id="avgHum">--</span>
+        </div>
+        <div class="metric">
+            <span class="mlabel">Luminosità</span>
+            <span class="mval" id="avgLux">--</span>
+        </div>
+    </div>
+</div>
+
+<!-- STORICO PER DATA -->
+<div class="section" id="sectionHistory" style="display:none">
+    <h2>Storico per data</h2>
+    <select id="dateSelect">
+        <option value="">-- Seleziona un giorno --</option>
+    </select>
+    <div id="filteredList"></div>
+</div>
+
+<!-- FORM POST -->
+<div class="section">
+    <h2>Invia nuova misurazione</h2>
+    <div class="post-grid">
+        <div class="field-group">
+            <label for="postPosition">Postazione (es. LEN4-1)</label>
+            <input type="text" id="postPosition" placeholder="LEN4-1" />
+        </div>
+        <div class="field-group">
+            <label for="postTemp">Temperatura (°C)</label>
+            <input type="number" id="postTemp" step="0.1" placeholder="21.5" />
+        </div>
+        <div class="field-group">
+            <label for="postHum">Umidità (%)</label>
+            <input type="number" id="postHum" step="0.1" placeholder="34.3" />
+        </div>
+        <div class="field-group">
+            <label for="postLux">Luminosità (lx)</label>
+            <input type="number" id="postLux" step="0.1" placeholder="3.3" />
+        </div>
+    </div>
+    <button onclick="postData()">Invia POST</button>
+    <div id="postFeedback"></div>
+</div>
+
+</body>
+</html>
