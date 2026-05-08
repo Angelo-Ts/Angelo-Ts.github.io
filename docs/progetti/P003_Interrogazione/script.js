@@ -182,7 +182,7 @@ function risolviBFS() {
         for (const vicino of getVicini(corrente.stato)) {
             const chiaveV = vicino.join(",");
             if (!visitati[chiaveV]) { // se non è già stato visitato
-                // salva da dove viene (serve per ricostruire il percorso)
+                // salva da dove viene
                 visitati[chiaveV] = { padre: corrente.chiave, stato: vicino };
                 coda.push({ stato: vicino, chiave: chiaveV });
             }
