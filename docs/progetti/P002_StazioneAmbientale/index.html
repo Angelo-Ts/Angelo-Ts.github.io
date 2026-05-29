@@ -12,29 +12,29 @@
 <body>
 
 <div class="header" style="background-color:#0f1117;">
-    <!-- LOGO -->
     <div class="logo">
         <a href="../../index.html">
             <img src="../../assets/images/logoAT.png" alt="Logo">
         </a>
     </div>
-    <!-- BOTTONI MENU DENTRO HEADER -->
     <div class="menu-button">
         <a href="../index.html">Progetti</a>
         <a href="../../aboutMe.html">About Me</a>
-        <a href="../../contactMe.html" >Contact Me</a>
+        <a href="../../contactMe.html">Contact Me</a>
     </div>
 </div>
 
 <h1>Dashboard delle stazioni ambientali</h1>
 
-<!-- CONNESSIONE -->
+<!-- raccolta ip rest server -->
 <div class="ip-row">
     <input type="text" id="ipInput" placeholder="Inserisci IP server" />
     <button id="getData">Connetti</button>
+    <span id="statusDot" class="status-dot disconnected"></span>
+    <span id="statusText" class="status-text">Non connesso</span>
 </div>
 
-<!-- MENÙ A TENDINA -->
+<!-- menù per postazioni e lab. -->
 <div class="selects-row">
     <div class="select-group">
         <label for="labSelect">Laboratorio</label>
@@ -50,7 +50,7 @@
     </div>
 </div>
 
-<!-- ULTIMA MISURAZIONE -->
+<!-- ultima misurazione per postazione -->
 <div class="section" id="sectionLast" style="display:none">
     <h2>Ultima misurazione</h2>
     <div class="metrics-row">
@@ -70,13 +70,13 @@
     <p id="lastTs"></p>
 </div>
 
-<!-- GRAFICO -->
+<!-- grafico Chart.js -->
 <div class="section" id="sectionChart" style="display:none">
     <h2>Andamento misurazioni</h2>
     <div class="toggle-row">
         <button class="toggle-btn active" id="btnTemp" onclick="toggleSeries('temp')">Temperatura °C</button>
-        <button class="toggle-btn active" id="btnHum"  onclick="toggleSeries('hum')">Umidità %</button>
-        <button class="toggle-btn active" id="btnLux"  onclick="toggleSeries('lux')">Luminosità lx</button>
+        <button class="toggle-btn active" id="btnHum" onclick="toggleSeries('hum')">Umidità %</button>
+        <button class="toggle-btn active" id="btnLux" onclick="toggleSeries('lux')">Luminosità lx</button>
     </div>
     <div class="chart-wrapper">
         <canvas id="myChart" role="img" aria-label="Grafico andamento misurazioni">Dati non disponibili.</canvas>
@@ -84,7 +84,7 @@
     <p id="avgCount"></p>
 </div>
 
-<!-- MEDIA -->
+<!-- media di tutte le misurazioni presenti -->
 <div class="section" id="sectionAvg" style="display:none">
     <h2>Media — tutte le misurazioni</h2>
     <div class="metrics-row">
@@ -103,7 +103,7 @@
     </div>
 </div>
 
-<!-- STORICO PER DATA -->
+<!-- menù per vedere singola misurazione per postaizone per data -->
 <div class="section" id="sectionHistory" style="display:none">
     <h2>Storico per data</h2>
     <select id="dateSelect">
@@ -112,7 +112,7 @@
     <div id="filteredList"></div>
 </div>
 
-<!-- FORM POST -->
+<!-- per inviare un POST al server con una nuova misuraizone -->
 <div class="section">
     <h2>Invia nuova misurazione</h2>
     <div class="post-grid">
