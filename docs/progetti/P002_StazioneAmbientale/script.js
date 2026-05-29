@@ -1,52 +1,50 @@
-/*
-
-async function main() {
-    const newObj = {
-        id: "xyz",
-        position: "LEN4-16",
-        temperature: 21.5,
-        humidity: 34.3,
-        luminosity: 3.3,
-        timestamp: "2026-03-30 08:36:50"
-    };
-
-    const response2 = await fetch("http://" + ip + "/data", { // ← await + header
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newObj)
-    });
-}*/
-
-/*
 let ip;
 let labs = {};
+let currentMeasurements = [];
+let chart = null;
+const seriesVisible = { temp: true, hum: true, lux: true };
+let refreshInterval = null;
 
 const getIP = document.querySelector("#getData");
-const labSelect = document.querySelector("#labSelect");
-const stationSelect = document.querySelector("#stationSelect");
+const selettoreLabs = document.querySelector("#labSelect");
+const selettoreStazioni = document.querySelector("#stationSelect");
 
-getIP.addEventListener("click", async () => {
-    ip = document.querySelector("#ipInput").value;
-    const json = await getData();
-    labs = getLab(json);
-    console.log(labs);
-    populateLabSelect(labs);
-});
-
+//funzione di get per ottenere il JSON dal server
 async function getData() {
     const response = await fetch("http://" + ip + "/data");
+    //promessa che prima o poi conterra il risultato della chiamata asincrona
     const json = await response.json();
     return json;
 }
 
+//pulsante per invio dell'indirizzo IP, suddivide il JSON in labs e riempe i selettori a tendina
+getIP.addEventListener("click", async () => {
+    ip = document.querySelector("#ipInput").value;
+    const json = await getData();
+    labs = getLab(json);
+    riempiSelettoreLab(labs);
+});
+
+//pulsante per invio dell'indirizzo IP con caricamento dati e refresh ogni minuto
+getIP.addEventListener("click", async () => {
+    ip = document.querySelector("#ipInput").value;
+    // ferma eventuale refresh precedente
+    if (refreshInterval){
+        clearInterval(refreshInterval);
+    }
+    await loadData();
+    //refresh ogni minuto
+    refreshInterval = setInterval(loadData, 60000);
+});
+
+//suddivide il JSON in oggetti di labs, ogni lab ha le sue postazioni con le proprie misurazioni
 function getLab(jsonData) {
     const labs = {};
     for (let i = 0; i < jsonData.length; i++) {
-        const item = jsonData[i]; // ← fix
+        const item = jsonData[i];
         const parts = item.position.split("-");
         const labName = parts[0];
         const stationId = parts[1];
-
         if (!labs[labName]) {
             labs[labName] = {};
         }
@@ -58,187 +56,76 @@ function getLab(jsonData) {
     return labs;
 }
 
-// Quando cambia il laboratorio → aggiorna le postazioni
-labSelect.addEventListener("change", () => {
-    const selectedLab = labSelect.value;
-    stationSelect.innerHTML = '<option value="">-- Seleziona postazione --</option>';
+//Selezionando il lab. Mostra la media di tutte le misurazioni di tutte le postazioni
+selettoreLabs.addEventListener("change", () => {
+    const selectedLab = selettoreLabs.value;
+    selettoreStazioni.innerHTML = '<option value="">-- Seleziona postazione --</option>';
+
+    // nascondi tutto
+    document.querySelector("#sectionLast").style.display    = "none";
+    document.querySelector("#sectionChart").style.display   = "none";
+    document.querySelector("#sectionHistory").style.display = "none";
 
     if (!selectedLab) {
-        stationSelect.disabled = true;
+        selettoreStazioni.disabled = true;
+        document.querySelector("#sectionAvg").style.display = "none";
         return;
     }
 
-    populateStationSelect(labs[selectedLab]);
-    stationSelect.disabled = false;
+    // riempe menu a tendina delle postazioni
+    riempiSelettorePostazioni(labs[selectedLab]);
+    selettoreStazioni.disabled = false;
+
+    // calcola media di tutte le misurazioni di tutte le postazioni del lab
+    const allMeasurements = Object.values(labs[selectedLab]).flat();
+    const n = allMeasurements.length;
+    const avgTemp = (allMeasurements.reduce((s, m) => s + m.temperature, 0) / n).toFixed(1);
+    const avgHum  = (allMeasurements.reduce((s, m) => s + m.humidity,    0) / n).toFixed(1);
+    const avgLux  = (allMeasurements.reduce((s, m) => s + m.luminosity,  0) / n).toFixed(1);
+
+    document.querySelector("#avgTemp").textContent  = avgTemp + " °C";
+    document.querySelector("#avgHum").textContent   = avgHum  + " %";
+    document.querySelector("#avgLux").textContent   = avgLux  + " lx";
+    document.querySelector("#avgCount").textContent = "Calcolata su " + n + " misurazioni — tutte le postazioni di " + selectedLab;
+    document.querySelector("#sectionAvg").style.display  = "block";
 });
 
-// Quando cambia la postazione → mostra i dati
-stationSelect.addEventListener("change", () => {
-    const selectedLab = labSelect.value;
-    const selectedStation = stationSelect.value;
-
-    if (!selectedStation) return;
-
-    const measurements = labs[selectedLab][selectedStation];
-    displayData(measurements);
-});
-
-function populateLabSelect(labs) {
-    labSelect.innerHTML = '<option value="">-- Seleziona laboratorio --</option>';
-    for (const labName in labs) {
-        const option = document.createElement("option");
-        option.value = labName;
-        option.textContent = labName;
-        labSelect.appendChild(option);
-    }
-}
-
-function populateStationSelect(stations) {
-    for (const stationId in stations) {
-        const option = document.createElement("option");
-        option.value = stationId;
-        option.textContent = "Postazione " + stationId;
-        stationSelect.appendChild(option);
-    }
-}
-
-function displayData(measurements) {
-    const result = document.querySelector("#result");
-    result.innerHTML = "";
-
-    // 1. ULTIMA MISURAZIONE (ultimo elemento dell'array)
-    const last = measurements[measurements.length - 1];
-
-    // 2. MEDIA su tutte le misurazioni
-    const avgTemp = (measurements.reduce((s, m) => s + m.temperature, 0) / measurements.length).toFixed(1);
-    const avgHum  = (measurements.reduce((s, m) => s + m.humidity,    0) / measurements.length).toFixed(1);
-    const avgLux  = (measurements.reduce((s, m) => s + m.luminosity,  0) / measurements.length).toFixed(1);
-
-    // 3. Lista date uniche per il menù a tendina
-    const uniqueDates = [...new Set(measurements.map(m => m.timestamp.split(" ")[0]))].sort();
-
-    result.innerHTML = `
-        <!-- ULTIMA MISURAZIONE -->
-        <div class="section">
-            <h3>🟢 Ultima misurazione — ${last.timestamp}</h3>
-            <p>🌡️ ${last.temperature}°C &nbsp; 💧 ${last.humidity}% &nbsp; 💡 ${last.luminosity} lx</p>
-        </div>
-
-        <!-- MEDIA -->
-        <div class="section">
-            <h3>📊 Media (${measurements.length} misurazioni)</h3>
-            <p>🌡️ ${avgTemp}°C &nbsp; 💧 ${avgHum}% &nbsp; 💡 ${avgLux} lx</p>
-        </div>
-
-        <!-- FILTRO PER DATA -->
-        <div class="section">
-            <h3>📅 Storico per data</h3>
-            <select id="dateSelect">
-                <option value="">-- Seleziona un giorno --</option>
-                ${uniqueDates.map(d => `<option value="${d}">${d}</option>`).join("")}
-            </select>
-            <div id="filteredList"></div>
-        </div>
-    `;
-
-    // Listener sul menù date
-    document.querySelector("#dateSelect").addEventListener("change", () => {
-        const selectedDate = document.querySelector("#dateSelect").value;
-        const filtered = measurements.filter(m => m.timestamp.startsWith(selectedDate));
-        const filteredList = document.querySelector("#filteredList");
-
-        if (!selectedDate || filtered.length === 0) {
-            filteredList.innerHTML = "<p>Nessuna misurazione per questa data.</p>";
-            return;
-        }
-
-        filteredList.innerHTML = filtered.map(m => `
-            <div class="measurement-row">
-                <span>🕒 ${m.timestamp}</span>
-                <span>🌡️ ${m.temperature}°C</span>
-                <span>💧 ${m.humidity}%</span>
-                <span>💡 ${m.luminosity} lx</span>
-            </div>
-        `).join("");
-    });
-}*/
-
-
-let ip;
-let labs = {};
-let currentMeasurements = [];
-let myChart = null;
-const seriesVisible = { temp: true, hum: true, lux: true };
-
-const getIP = document.querySelector("#getData");
-const labSelect = document.querySelector("#labSelect");
-const stationSelect = document.querySelector("#stationSelect");
-
-async function getData() {
-    const response = await fetch("http://" + ip + "/data");
-    const json = await response.json();
-    return json;
-}
-
-function getLab(jsonData) {
-    const labs = {};
-    for (let i = 0; i < jsonData.length; i++) {
-        const item = jsonData[i];
-        const parts = item.position.split("-");
-        const labName = parts[0];
-        const stationId = parts[1];
-        if (!labs[labName]) labs[labName] = {};
-        if (!labs[labName][stationId]) labs[labName][stationId] = [];
-        labs[labName][stationId].push(item);
-    }
-    return labs;
-}
-
-getIP.addEventListener("click", async () => {
-    ip = document.querySelector("#ipInput").value;
-    const json = await getData();
-    labs = getLab(json);
-    populateLabSelect(labs);
-});
-
-labSelect.addEventListener("change", () => {
-    const selectedLab = labSelect.value;
-    stationSelect.innerHTML = '<option value="">-- Seleziona postazione --</option>';
-    if (!selectedLab) {
-        stationSelect.disabled = true;
+//Selezionando la postazione, mostra i dati di quella postazione specifica
+selettoreStazioni.addEventListener("change", () => {
+    const selectedLab     = selettoreLabs.value;
+    const selectedStation = selettoreStazioni.value;
+    if (!selectedStation) {
+        // torna alla sola media del lab
+        document.querySelector("#sectionLast").style.display    = "none";
+        document.querySelector("#sectionChart").style.display   = "none";
+        document.querySelector("#sectionHistory").style.display = "none";
         return;
     }
-    populateStationSelect(labs[selectedLab]);
-    stationSelect.disabled = false;
-});
-
-stationSelect.addEventListener("change", () => {
-    const selectedLab = labSelect.value;
-    const selectedStation = stationSelect.value;
-    if (!selectedStation) return;
     currentMeasurements = labs[selectedLab][selectedStation];
     displayData(currentMeasurements);
 });
 
-function populateLabSelect(labs) {
-    labSelect.innerHTML = '<option value="">-- Seleziona laboratorio --</option>';
+//riempe menu a tendina dei laboratori e delle postazioni, con i dati ottenuti dal JSON
+function riempiSelettoreLab(labs) { // Rinominata
+    selettoreLabs.innerHTML = '<option value="">-- Seleziona laboratorio --</option>';
     for (const labName in labs) {
         const option = document.createElement("option");
         option.value = labName;
         option.textContent = labName;
-        labSelect.appendChild(option);
+        selettoreLabs.appendChild(option);
     }
 }
-
-function populateStationSelect(stations) {
+// ^^
+function riempiSelettorePostazioni(stations) { // Rinominata
     for (const stationId in stations) {
         const option = document.createElement("option");
         option.value = stationId;
         option.textContent = "Postazione " + stationId;
-        stationSelect.appendChild(option);
+        selettoreStazioni.appendChild(option);
     }
 }
 
+// mostra dati ultima misurazione, media, grafico e storico misurazioni per postazione
 function displayData(measurements) {
     const last = measurements[measurements.length - 1];
 
@@ -262,6 +149,7 @@ function displayData(measurements) {
     document.querySelector("#avgLux").textContent  = avgLux  + " lx";
     document.querySelector("#avgCount").textContent = "Calcolata su " + n + " misurazioni totali";
 
+
     buildChart(measurements);
 
     const dates = [...new Set(measurements.map(m => m.timestamp.split(" ")[0]))].sort();
@@ -277,15 +165,19 @@ function displayData(measurements) {
         '<p>Seleziona una data per vedere le misurazioni.</p>';
 }
 
+//grafico con Chart.js, con 3 variabili su due assi y diversi
 function buildChart(measurements) {
     const labels = measurements.map((_, i) => "#" + (i + 1));
     const temps  = measurements.map(m => parseFloat(m.temperature.toFixed(1)));
     const hums   = measurements.map(m => parseFloat(m.humidity.toFixed(1)));
     const luxes  = measurements.map(m => parseFloat(m.luminosity.toFixed(1)));
 
-    if (myChart) myChart.destroy();
+    // se esiste, elimina grafico precedente cancellare le sovrapposizioni delle rette
+    if (chart) {
+        chart.destroy();
+    }
 
-    myChart = new Chart(document.getElementById("myChart"), {
+    chart = new Chart(document.getElementById("myChart"), {
         type: "line",
         data: {
             labels,
@@ -311,33 +203,47 @@ function buildChart(measurements) {
     });
 }
 
+//funzione per mostrare/nascondere le variabili del grafico e aggiornare pulsanti
 function toggleSeries(key) {
     const idxMap = { temp: 0, hum: 1, lux: 2 };
     const btnMap = { temp: "#btnTemp", hum: "#btnHum", lux: "#btnLux" };
     seriesVisible[key] = !seriesVisible[key];
-    if (myChart) { myChart.data.datasets[idxMap[key]].hidden = !seriesVisible[key]; myChart.update(); }
+    if (chart) {
+        chart.data.datasets[idxMap[key]].hidden = !seriesVisible[key];
+        chart.update();
+    }
     document.querySelector(btnMap[key]).classList.toggle("active",   seriesVisible[key]);
     document.querySelector(btnMap[key]).classList.toggle("inactive", !seriesVisible[key]);
 }
 
+//filtro per data, mostra solo le misurazioni di quella data selezionata
 document.querySelector("#dateSelect").addEventListener("change", () => {
     const date = document.querySelector("#dateSelect").value;
     const list = document.querySelector("#filteredList");
-    if (!date) { list.innerHTML = "<p>Seleziona una data.</p>"; return; }
+    if (!date) {
+        list.innerHTML = "<p>Seleziona una data.</p>";
+        return;
+    }
     const filtered = currentMeasurements.filter(m => m.timestamp.startsWith(date));
-    if (!filtered.length) { list.innerHTML = "<p>Nessuna misurazione per questa data.</p>"; return; }
+    if (!filtered.length) {
+        list.innerHTML = "<p>Nessuna misurazione per questa data.</p>";
+        return;
+    }
     list.innerHTML = filtered.map(m => {
         const orario = m.timestamp.split(" ")[1];
         return `<div class="measurement-row">
-            <span>🕒 ${orario}</span>
-            <span>🌡️ ${m.temperature}°C</span>
-            <span>💧 ${m.humidity}%</span>
-            <span>💡 ${m.luminosity} lx</span>
+            <span> ${orario}</span>
+            <span> ${m.temperature}°C</span>
+            <span> ${m.humidity}%</span>
+            <span> ${m.luminosity} lx</span>
         </div>`;
     }).join("");
 });
 
+
+//funzione per inviare l'array nel json tramite metodo POST
 async function postData() {
+
     const feedback    = document.querySelector("#postFeedback");
     const temperature = parseFloat(document.querySelector("#postTemp").value);
     const humidity    = parseFloat(document.querySelector("#postHum").value);
@@ -376,5 +282,49 @@ async function postData() {
     } catch (e) {
         feedback.className = "post-feedback err";
         feedback.textContent = "Errore di connessione: " + e.message;
+    }
+}
+
+//stato connessione al server, modifica pallino e testo
+function setStatus(state) {
+    const dot  = document.querySelector("#statusDot");
+    const text = document.querySelector("#statusText");
+    dot.className = "status-dot " + state;
+    const labels = {
+        connected:    "Connesso",
+        disconnected: "Non connesso",
+        loading:      "Connessione..."
+    };
+    text.textContent = labels[state] || "";
+}
+
+async function loadData() {
+    try {
+        setStatus("loading");
+        const json = await getData();
+        labs = getLab(json);
+
+        // salva scelte dell'utente per evitare di perderle al refresh
+        const labSelect     = selettoreLabs.value;
+        const stazioneSelect = selettoreStazioni.value;
+
+        riempiSelettoreLab(labs);
+
+        //evita ripristino selezione durante il refresh
+        if (labSelect && labs[labSelect]) {
+            selettoreLabs.value = labSelect;
+            riempiSelettorePostazioni(labs[labSelect]);
+            selettoreStazioni.disabled = false;
+
+            if (stazioneSelect && labs[labSelect][stazioneSelect]) {
+                selettoreStazioni.value = stazioneSelect;
+                currentMeasurements = labs[labSelect][stazioneSelect];
+                displayData(currentMeasurements);
+            }
+        }
+
+        setStatus("connected");
+    } catch (e) {
+        setStatus("disconnected");
     }
 }
